@@ -1,0 +1,8 @@
+# K8s Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cross-platform-app
+  labels:
+    app: cross-platform-app
+    env: production

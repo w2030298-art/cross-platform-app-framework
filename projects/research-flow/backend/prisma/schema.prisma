@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum Role {
+  ADVISOR
+  POSTDOC
+  PHD
+  MASTER
+  ADMIN
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum ExperimentType {
+  ALGORITHM_VERIFICATION
+  HYPERPARAM_TUNING
+  ABLATION_STUDY
+  REPRODUCTION
+  DATA_COLLECTION
+  OTHER
+}
+
+enum ExperimentStatus {
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  PAUSED
+}
+
+enum CommentPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+enum PaperStatus {
+  IDEA
+  PROPOSAL
+  EXPERIMENT
+  DATA_ANALYSIS
+  WRITING
+  SUBMITTED
+  REVIEW
+  REVISION
+  ACCEPTED
+  PUBLISHED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+enum ReportStatus {
+  DRAFT
+  READY
+  COMPLETED
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  RETIRED
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  feishuId  String   @unique
+  name      String
+  role      Role     @default(PHD)
+  avatar    String?
+  email     String?
+  labId     String?
+  lab       Lab?     @relation("LabMember", fields: [labId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  experiments       Experiment[]
+  comments          Comment[]
+  papers            Paper[]
+  equipmentBookings EquipmentBooking[]
+  reportLines       WeeklyReportLine[]
+  labAdvised        Lab[]     @relation("LabAdvisor")
+
+  @@map("users")
+}
+
+model Lab {
+  id          String   @id @default(cuid())
+  name        String
+  advisorId   String
+  advisor     User     @relation("LabAdvisor", fields: [advisorId], references: [id])
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     User[]     @relation("LabMember")
+  projects    Project[]
+  experiments Experiment[]
+  papers      Paper[]
+  reports     WeeklyReport[]
+  equipment   Equipment[]
+
+  @@map("labs")
+}
+
+model Project {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  labId       String
+  lab         Lab             @relation(fields: [labId], references: [id])
+  status      ProjectStatus   @default(ACTIVE)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  papers      Paper[]
+  experiments Experiment[]
+
+  @@map("projects")
+}
+
+model Experiment {
+  id         String           @id @default(cuid())
+  title      String
+  date       DateTime         @default(now())
+  type       ExperimentType
+  status     ExperimentStatus @default(IN_PROGRESS)
+  purpose    String?
+  process    String?
+  result     String?
+  conclusion String?
+  nextStep   String?
+  tags       String           @default("[]")
+  images     String?
+  attachments String?
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+  labId     String
+  lab       Lab      @relation(fields: [labId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments       Comment[]
+
+  @@index([authorId])
+  @@index([labId])
+  @@index([status])
+  @@map("experiments")
+}
+
+model Comment {
+  id           String          @id @default(cuid())
+  content      String
+  quote        String?
+  priority     CommentPriority @default(NORMAL)
+  resolved     Boolean         @default(false)
+
+  experimentId String
+  experiment   Experiment      @relation(fields: [experimentId], references: [id])
+  authorId     String
+  author       User            @relation(fields: [authorId], references: [id])
+  parentId     String?
+  parent       Comment?        @relation("CommentReplies", fields: [parentId], references: [id])
+  replies      Comment[]       @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([experimentId])
+  @@map("comments")
+}
+
+model Paper {
+  id        String      @id @default(cuid())
+  title     String
+  abstract_ String?
+  keywords  String      @default("[]")
+  venue     String?
+
+  authorId  String
+  author    User        @relation(fields: [authorId], references: [id])
+  projectId String?
+  project   Project?    @relation(fields: [projectId], references: [id])
+  labId     String
+  lab       Lab         @relation(fields: [labId], references: [id])
+  status    PaperStatus @default(IDEA)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  milestones PaperMilestone[]
+
+  @@index([authorId])
+  @@index([labId])
+  @@map("papers")
+}
+
+model PaperMilestone {
+  id          String         @id @default(cuid())
+  paperId     String
+  paper       Paper          @relation(fields: [paperId], references: [id])
+  stage       PaperStatus
+  plannedDate DateTime
+  actualDate  DateTime?
+  status      MilestoneStatus @default(PENDING)
+  note        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([paperId])
+  @@map("paper_milestones")
+}
+
+model WeeklyReport {
+  id          String       @id @default(cuid())
+  labId       String
+  lab         Lab          @relation(fields: [labId], references: [id])
+  weekStart   DateTime
+  weekEnd     DateTime
+  meetingDate DateTime?
+  meetingUrl  String?
+  meetingNotes String?
+  status      ReportStatus @default(DRAFT)
+  feishuDocId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lines WeeklyReportLine[]
+
+  @@index([labId])
+  @@map("weekly_reports")
+}
+
+model WeeklyReportLine {
+  id                   String   @id @default(cuid())
+  reportId             String
+  report               WeeklyReport @relation(fields: [reportId], references: [id])
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id])
+  experimentsCompleted Int      @default(0)
+  experimentsInProgress Int     @default(0)
+  experimentsFailed    Int      @default(0)
+  keyFindings          String?
+  problems             String?
+  nextWeekPlan         String?
+  actionItems          String?
+  experimentIds        String   @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([reportId])
+  @@index([userId])
+  @@map("weekly_report_lines")
+}
+
+model Equipment {
+  id          String           @id @default(cuid())
+  name        String
+  model       String?
+  location    String?
+  status      EquipmentStatus  @default(AVAILABLE)
+  description String?
+  labId       String
+  lab         Lab              @relation(fields: [labId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings EquipmentBooking[]
+
+  @@map("equipment")
+}
+
+model EquipmentBooking {
+  id          String        @id @default(cuid())
+  equipmentId String
+  equipment   Equipment     @relation(fields: [equipmentId], references: [id])
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  startTime   DateTime
+  endTime     DateTime
+  purpose     String?
+  status      BookingStatus @default(PENDING)
+  approvalId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([equipmentId])
+  @@index([userId])
+  @@map("equipment_bookings")
+}

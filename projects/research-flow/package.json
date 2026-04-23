@@ -1,0 +1,23 @@
+{
+  "name": "research-flow",
+  "version": "0.1.0",
+  "description": "研飞 ResearchFlow - 飞书版科研工作流应用",
+  "private": true,
+  "scripts": {
+    "dev:feishu": "cd feishu-app && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run dev:feishu\" \"npm run dev:backend\"",
+    "build:feishu": "cd feishu-app && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "db:migrate": "cd backend && npx prisma migrate dev",
+    "db:seed": "cd backend && npx prisma db seed",
+    "db:studio": "cd backend && npx prisma studio",
+    "setup": "npx tsx scripts/setup.ts",
+    "start": "npm run dev",
+    "lint": "eslint . --ext .ts,.tsx,.vue",
+    "test": "cd backend && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

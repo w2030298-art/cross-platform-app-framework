@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: researchflow-db
+    environment:
+      POSTGRES_USER: researchflow
+      POSTGRES_PASSWORD: researchflow
+      POSTGRES_DB: researchflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U researchflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: researchflow-backend
+    environment:
+      DATABASE_URL: postgresql://researchflow:researchflow@postgres:5432/researchflow
+      PORT: 3001
+      NODE_ENV: development
+      FEISHU_APP_ID: ${FEISHU_APP_ID:-cli_xxxxxxxxxxxx}
+      FEISHU_APP_SECRET: ${FEISHU_APP_SECRET:-your_app_secret_here}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./feishu-app
+      dockerfile: Dockerfile
+    container_name: researchflow-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./feishu-app/src:/app/src
+    command: npm run dev -- --host
+
+volumes:
+  pgdata:
