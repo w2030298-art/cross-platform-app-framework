@@ -1,0 +1,19 @@
+﻿<view class="privacy-mask">
+  <view class="privacy-dialog">
+    <text class="privacy-title">隐私政策提示</text>
+    <view class="privacy-body">
+      <text class="privacy-text">
+        感谢您使用生活百宝箱！在使用前，请您仔细阅读并同意我们的隐私政策。
+      </text>
+      <text class="privacy-text">
+        我们将严格遵守相关法律法规，保护您的个人信息安全。本应用仅收集必要信息以提供基本服务，不会主动获取您的手机号、位置等敏感权限。
+      </text>
+    </view>
+    <view class="privacy-link" bindtap="onViewPrivacy">
+      <text>查看完整隐私政策</text>
+    </view>
+    <view class="privacy-actions">
+      <button class="btn-primary privacy-btn" bindtap="onAccept">我已阅读并同意</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,35 @@
+﻿<view class="page">
+  <text class="page-title">意见反馈</text>
+
+  <view class="card form-card">
+    <view class="form-group">
+      <text class="form-label">反馈内容</text>
+      <textarea
+        class="textarea"
+        placeholder="请描述您的问题或建议（1-500字）"
+        value="{{content}}"
+        maxlength="500"
+        bindinput="onContentInput"
+      ></textarea>
+      <text class="form-count">{{content.length}}/500</text>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">联系方式（选填）</text>
+      <input
+        class="input"
+        placeholder="方便我们联系您"
+        value="{{contact}}"
+        bindinput="onContactInput"
+      ></input>
+    </view>
+
+    <button
+      class="btn-primary submit-btn"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '提交中...' : '提交反馈'}}
+    </button>
+  </view>
+</view>

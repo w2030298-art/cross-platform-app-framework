@@ -1,0 +1,18 @@
+﻿<view class="content-card card">
+  <view class="card-body">
+    <view class="card-info">
+      <text class="card-title">{{title}}</text>
+      <text class="card-summary">{{summary}}</text>
+      <view class="card-meta">
+        <text class="tag">{{category}}</text>
+        <text class="card-date">{{publishedAt}}</text>
+      </view>
+    </view>
+    <image
+      wx:if="{{coverUrl}}"
+      class="card-cover"
+      src="{{coverUrl}}"
+      mode="aspectFill"
+    ></image>
+  </view>
+</view>

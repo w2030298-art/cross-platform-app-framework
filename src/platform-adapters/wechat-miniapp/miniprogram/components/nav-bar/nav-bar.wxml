@@ -1,0 +1,6 @@
+﻿<view class="nav-bar">
+  <view wx:if="{{back}}" class="nav-back" bindtap="onBack">
+    <view class="nav-back-arrow"></view>
+  </view>
+  <text class="nav-title">{{title}}</text>
+</view>

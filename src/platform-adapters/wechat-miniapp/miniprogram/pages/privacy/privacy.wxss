@@ -1,0 +1,6 @@
+﻿.privacy-content {
+  font-size: 28rpx;
+  color: var(--color-text);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}

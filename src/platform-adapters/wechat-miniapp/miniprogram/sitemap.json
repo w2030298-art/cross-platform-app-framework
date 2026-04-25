@@ -1,0 +1,13 @@
+﻿{
+  "desc": "脚手架阶段仅放开首页收录，其他页面默认不收录。",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/home/home"
+    },
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

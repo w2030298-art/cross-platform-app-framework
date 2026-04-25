@@ -1,0 +1,6 @@
+﻿<view class="page">
+  <text class="page-title">隐私政策</text>
+  <view class="card">
+    <text class="privacy-content">{{content}}</text>
+  </view>
+</view>

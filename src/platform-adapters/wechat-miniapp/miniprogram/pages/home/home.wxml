@@ -1,0 +1,54 @@
+﻿<view class="page">
+  <view class="search-bar" bindtap="onSearchTap">
+    <view class="search-input">
+      <text class="search-icon">&#x1F50D;</text>
+      <text class="search-placeholder">搜索生活小技巧...</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-x class="category-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="category-list">
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category-item {{currentCategory === item ? 'active' : ''}}"
+        data-category="{{item}}"
+        bindtap="onCategoryTap"
+      >
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <loading-state wx:if="{{loading && list.length === 0}}" text="正在加载..."></loading-state>
+
+  <empty-state wx:elif="{{empty}}" text="暂无相关内容"></empty-state>
+
+  <block wx:else>
+    <view class="content-list">
+      <content-card
+        wx:for="{{list}}"
+        wx:key="id"
+        id="{{item.id}}"
+        title="{{item.title}}"
+        summary="{{item.summary}}"
+        cover-url="{{item.coverUrl}}"
+        category="{{item.category}}"
+        published-at="{{item.publishedAt}}"
+        data-id="{{item.id}}"
+        bindtap="onItemTap"
+      ></content-card>
+    </view>
+    <view wx:if="{{loading}}" class="load-more">
+      <text class="load-more-text">加载中...</text>
+    </view>
+    <view wx:elif="{{!hasMore}}" class="load-more">
+      <text class="load-more-text">没有更多了</text>
+    </view>
+  </block>
+</view>
+
+<privacy-consent
+  wx:if="{{showPrivacy}}"
+  bind:accept="onPrivacyAccept"
+></privacy-consent>

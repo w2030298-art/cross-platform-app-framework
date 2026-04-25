@@ -1,0 +1,6 @@
+﻿{
+  "usingComponents": {
+    "loading-state": "../../components/loading-state/loading-state"
+  },
+  "navigationBarTitleText": "详情"
+}

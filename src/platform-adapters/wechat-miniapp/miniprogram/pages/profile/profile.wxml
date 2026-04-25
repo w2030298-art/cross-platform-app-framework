@@ -1,0 +1,23 @@
+﻿<view class="page">
+  <view class="profile-header card">
+    <view class="avatar"></view>
+    <text class="nickname">生活百宝箱用户</text>
+  </view>
+
+  <view class="menu-card card">
+    <view
+      wx:for="{{menus}}"
+      wx:key="label"
+      class="card-row"
+      data-url="{{item.url}}"
+      bindtap="onMenuTap"
+    >
+      <text class="card-row-label">{{item.label}}</text>
+      <view class="card-row-arrow"></view>
+    </view>
+  </view>
+
+  <view class="version">
+    <text>版本 v{{version}}</text>
+  </view>
+</view>

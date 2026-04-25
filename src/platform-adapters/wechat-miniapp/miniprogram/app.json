@@ -1,0 +1,45 @@
+﻿{
+  "pages": [
+    "pages/home/home",
+    "pages/detail/detail",
+    "pages/search/search",
+    "pages/favorite/favorite",
+    "pages/profile/profile",
+    "pages/privacy/privacy",
+    "pages/feedback/feedback"
+  ],
+  "window": {
+    "navigationBarTitleText": "生活百宝箱",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#3B82F6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home_active.png"
+      },
+      {
+        "pagePath": "pages/favorite/favorite",
+        "text": "收藏",
+        "iconPath": "assets/tab/favorite.png",
+        "selectedIconPath": "assets/tab/favorite_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/tab/profile.png",
+        "selectedIconPath": "assets/tab/profile_active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

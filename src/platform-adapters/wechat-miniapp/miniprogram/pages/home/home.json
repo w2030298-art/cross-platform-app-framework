@@ -1,0 +1,9 @@
+﻿{
+  "usingComponents": {
+    "content-card": "../../components/content-card/content-card",
+    "loading-state": "../../components/loading-state/loading-state",
+    "empty-state": "../../components/empty-state/empty-state",
+    "privacy-consent": "../../components/privacy-consent/privacy-consent"
+  },
+  "enablePullDownRefresh": true
+}

@@ -1,0 +1,33 @@
+﻿<view class="page detail-page">
+  <loading-state wx:if="{{loading}}" text="正在加载..."></loading-state>
+
+  <block wx:elif="{{item}}">
+    <view class="detail-header">
+      <text class="detail-title">{{item.title}}</text>
+      <view class="detail-meta">
+        <text class="tag">{{item.category}}</text>
+        <text class="detail-date">{{item.publishedAt}}</text>
+      </view>
+    </view>
+
+    <image
+      wx:if="{{item.coverUrl}}"
+      class="detail-cover"
+      src="{{item.coverUrl}}"
+      mode="widthFix"
+    ></image>
+
+    <view class="detail-body card">
+      <text class="detail-text">{{item.body}}</text>
+    </view>
+
+    <view class="detail-actions safe-bottom">
+      <button
+        class="btn-plain fav-btn {{isFavorite ? 'faved' : ''}}"
+        bindtap="onToggleFavorite"
+      >
+        {{isFavorite ? '已收藏' : '收藏'}}
+      </button>
+    </view>
+  </block>
+</view>

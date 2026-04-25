@@ -1,0 +1,45 @@
+﻿<view class="page">
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <input
+        class="search-input"
+        placeholder="搜索生活小技巧..."
+        value="{{keyword}}"
+        bindinput="onInputChange"
+        bindconfirm="onSearch"
+        confirm-type="search"
+        focus
+      ></input>
+      <view wx:if="{{keyword}}" class="search-clear" bindtap="onClear">
+        <text>✕</text>
+      </view>
+    </view>
+    <view class="search-btn" bindtap="onSearch">
+      <text>搜索</text>
+    </view>
+  </view>
+
+  <loading-state wx:if="{{loading}}" text="搜索中..."></loading-state>
+
+  <empty-state
+    wx:elif="{{searched && empty}}"
+    text="未找到相关内容"
+  ></empty-state>
+
+  <block wx:elif="{{searched}}">
+    <view class="search-result">
+      <content-card
+        wx:for="{{list}}"
+        wx:key="id"
+        id="{{item.id}}"
+        title="{{item.title}}"
+        summary="{{item.summary}}"
+        cover-url="{{item.coverUrl}}"
+        category="{{item.category}}"
+        published-at="{{item.publishedAt}}"
+        data-id="{{item.id}}"
+        bindtap="onItemTap"
+      ></content-card>
+    </view>
+  </block>
+</view>
